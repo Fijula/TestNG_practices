@@ -1,50 +1,59 @@
-package Practise;
-import java.util.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.SessionId;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WindowType;
-import org.openqa.selenium.support.ui.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
-public class practices {
+import java.io.File;
+import java.time.Duration;
 
-	public static void main(String[] args) {
+public class SeleniumDay17 {
 
-	WebDriver wd = new ChromeDriver();
-//	   Iframe - locate using any 3 of below case s and once iframe located perform the action
-    wd.get("https://selectorshub.com/iframe-scenario/");
-//    case 1: using indexing
-    wd.switchTo().frame(0);
-    //case 2: using iframe id/name :below id =pact1
-    wd.switchTo().frame("pact1");
-    //case 3: using web elemnt : below iframe is inside main ,where main id= content
-    wd.switchTo().frame(wd.findElement(By.xpath("//main[@id='content']//iframe")));
+    public static void main(String[] args) {
 
-    //after locating iframe send the below inside input field
-    wd.findElement(By.xpath("//input[@id='inp_val']")).sendKeys("Fijula");
-    
-    
-//nested iframes
-    wd.get("https://selectorshub.com/iframe-scenario/");
-    //setich to nested iframe pact2(id-parent iframe) inside pact1(id-child iframe)
-    wd.switchTo().frame("pact1");
-    wd.switchTo().frame("pact2");
-    //once inside nested iframe send the keys in input locate using xpath
-    wd.findElement(By.xpath("//input[@id='jex']")).sendKeys("Jain");
-    //navigate back to parent ifrmae
-    wd.switchTo().parentFrame();
-    wd.findElement(By.xpath("//input[@id='inp_val']")).sendKeys("Akhil");
-      
-      
-	}
 
+        ChromeOptions option = new ChromeOptions();
+        //option.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+
+
+        WebDriver wd = new ChromeDriver(option);
+
+
+
+        System.out.println("PageLoad: "+wd.manage().timeouts().getPageLoadTimeout().toSeconds());
+        System.out.println("IW: "+wd.manage().timeouts().getImplicitWaitTimeout().toSeconds());
+        System.out.println("ScriptTimeout: "+wd.manage().timeouts().getScriptTimeout().toSeconds());
+
+        //Need to figure it out
+        wd.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(1));
+        wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+
+        System.out.println("IW2: "+wd.manage().timeouts().getImplicitWaitTimeout().toSeconds());
+        System.out.println("PageLoad2: "+wd.manage().timeouts().getPageLoadTimeout().toSeconds());
+
+        wd.get("https://demo.evershop.io/account/login");
+
+        wd.findElement(By.cssSelector("input[name='email']")  ).sendKeys("akhiljda@gmail.com");
+        wd.findElement(   By.cssSelector("input[name='password']")  ).sendKeys("Password");
+        wd.findElement(   By.cssSelector("button.button")  ).click();
+
+        wd.findElement(By.xpath("//span[text()='Shop kids']")).click();
+
+
+        //((JavascriptExecutor)wd).executeAsyncScript()
+
+
+
+    }
+
+    public void addExtensionToBrowser() {
+        ChromeOptions option = new ChromeOptions();
+        option.addExtensions(new File("E:\\Akhil\\PodTest\\Clients\\Self\\Bootcamp\\FullStackSDET\\Selenium\\AdBlock-Gold-No-Ads-Pure-Gold.crx"));
+
+        WebDriver wd = new ChromeDriver(option);
+
+        wd.get("https://www.globalsqa.com/demo-site/sliders");
+    }
 }
